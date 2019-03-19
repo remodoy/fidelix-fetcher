@@ -31,9 +31,11 @@ def get_version(ip):
         response = requests.get("http://{}/".format(ip), headers={'user-agent': USER_AGENT}, timeout=30)
     except requests.exceptions.Timeout:
         return "timeout"
+    except requests.exceptions.ConnectionError:
+        return "connection refused"
     server = response.headers.get("Server", "")
     server = server.lower()
-    version = "-"
+    version = server
     if 'fidelix' in server:
         idx = server.find('fidelix')
         version = server[idx+8:]
@@ -80,11 +82,11 @@ def main():
             for row in values:
                 i += 1
                 print('%s' % (row,))
+                if not row[0]:
+                    break
                 version = get_version(row[0])
                 update(sheet, i, version)
                 f.write("{},{}".format(row[0], version))
-                if i > 5:
-                    break
 
 
 if __name__ == '__main__':
