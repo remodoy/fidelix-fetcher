@@ -6,6 +6,7 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import time
 import requests
 
 # If modifying these scopes, delete the file token.pickle.
@@ -80,13 +81,14 @@ def main():
         i = 2
         with open("status-{}.txt".format(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M")), 'w') as f:
             for row in values:
+                time.sleep(0.1)
                 i += 1
                 print('%s' % (row,))
                 if not row[0]:
                     break
                 version = get_version(row[0])
                 update(sheet, i, version)
-                f.write("{},{}".format(row[0], version))
+                f.write("{},{}\n".format(row[0], version))
 
 
 if __name__ == '__main__':
