@@ -8,19 +8,16 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import time
 import requests
+import config
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-
-# The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1gjePnef_HnYIWNXMkb9uZ1vp9O90MZiOUHFeJNQgkJM'
-RANGE_NAME = 'Sheet1!B3:L'
 
 USER_AGENT = 'fidelix-version-fetcher/0.1'
 
 
 def update(sheet, row, state):
-    result = sheet.values().update(spreadsheetId=SPREADSHEET_ID,
+    result = sheet.values().update(spreadsheetId=config.SPREADSHEET_ID,
                                    range='Sheet1!L{}:L'.format(row),
                                    valueInputOption='RAW', body={'values': [[state]]}
                                    ).execute()
@@ -70,8 +67,8 @@ def main():
 
     # Call the Sheets API
     sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
-                                range=RANGE_NAME).execute()
+    result = sheet.values().get(spreadsheetId=config.SPREADSHEET_ID,
+                                range=config.RANGE_NAME).execute()
     values = result.get('values', [])
 
     if not values:

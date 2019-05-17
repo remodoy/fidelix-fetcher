@@ -1,0 +1,3 @@
+# The ID and range of a sample spreadsheet.
+SPREADSHEET_ID = 'abc123'
+RANGE_NAME = 'Sheet1!B3:L'
